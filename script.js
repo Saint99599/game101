@@ -24,10 +24,31 @@ let showDebug = false;
 let tomatoLayer;
 let tomatos;
 let tomatoScore = 0;
+let vegetable01Layer;
+let vegetables01;
+let vegetable01Score = 0;
+let vegetable02Layer;
+let vegetables02;
+let vegetable02Score = 0;
+let vegetable03Layer;
+let vegetables03;
+let vegetable03Score = 0;
+let vegetable04Layer;
+let vegetables04;
+let vegetable04Score = 0;
+let vegetable05Layer;
+let vegetables05;
+let vegetable05Score = 0;
 
 function preload() {
   this.load.image("tiles", "assets/map/map101.png");
   this.load.image("tomato", "assets/vegetable/tomato.png");
+  this.load.image("vegetable01", "assets/vegetable/vegetable01.png");
+  this.load.image("vegetable02", "assets/vegetable/vegetable02.png");
+  this.load.image("vegetable03", "assets/vegetable/vegetable03.png");
+  this.load.image("vegetable04", "assets/vegetable/vegetable04.png");
+  this.load.image("vegetable05", "assets/vegetable/vegetable05.png");
+  
   this.load.tilemapTiledJSON("map", "assets/map/map101.json");
   
   this.load.atlas("atlas", "assets/player/atlas.png", "assets/player/atlas.json");
@@ -54,6 +75,11 @@ function create() {
   const plot11 = map.createStaticLayer("plot11", tileset, 0, 0);
   const plot12 = map.createStaticLayer("plot12", tileset, 0, 0);
   tomatoLayer = map.getObjectLayer('tomatoLayer')['objects'];
+  vegetable01Layer = map.getObjectLayer('vegetable01Layer')['objects'];
+  vegetable02Layer = map.getObjectLayer('vegetable02Layer')['objects'];
+  vegetable03Layer = map.getObjectLayer('vegetable03Layer')['objects'];
+  vegetable04Layer = map.getObjectLayer('vegetable04Layer')['objects'];
+  vegetable05Layer = map.getObjectLayer('vegetable05Layer')['objects'];
 
   forest.setCollisionByProperty({ collides: true });
   home01.setCollisionByProperty({ collides: true });
@@ -77,14 +103,84 @@ function create() {
        obj.body.width = object.width; 
        obj.body.height = object.height; 
   });
+  vegetables01 = this.physics.add.staticGroup()
+  vegetable01Layer.forEach(object => {
+    let obj = vegetables01.create(object.x, object.y, "vegetable01"); 
+       obj.setScale(object.width/32, object.height/32); 
+       obj.setOrigin(0,1); 
+       obj.body.width = object.width; 
+       obj.body.height = object.height; 
+  });
+  vegetables02 = this.physics.add.staticGroup()
+  vegetable02Layer.forEach(object => {
+    let obj = vegetables02.create(object.x, object.y, "vegetable02"); 
+       obj.setScale(object.width/32, object.height/32); 
+       obj.setOrigin(0,1); 
+       obj.body.width = object.width; 
+       obj.body.height = object.height; 
+  });
+  vegetables03 = this.physics.add.staticGroup()
+  vegetable03Layer.forEach(object => {
+    let obj = vegetables03.create(object.x, object.y, "vegetable03"); 
+       obj.setScale(object.width/32, object.height/32); 
+       obj.setOrigin(0,1); 
+       obj.body.width = object.width; 
+       obj.body.height = object.height; 
+  });
+  vegetables04 = this.physics.add.staticGroup()
+  vegetable04Layer.forEach(object => {
+    let obj = vegetables04.create(object.x, object.y, "vegetable04"); 
+       obj.setScale(object.width/32, object.height/32); 
+       obj.setOrigin(0,1); 
+       obj.body.width = object.width; 
+       obj.body.height = object.height; 
+  });
+  vegetables05 = this.physics.add.staticGroup()
+  vegetable05Layer.forEach(object => {
+    let obj = vegetables05.create(object.x, object.y, "vegetable05"); 
+       obj.setScale(object.width/32, object.height/32); 
+       obj.setOrigin(0,1); 
+       obj.body.width = object.width; 
+       obj.body.height = object.height; 
+  });
 
   //collisons
   map.setCollisionBetween(0, 923, true, 'ground');
   player.setCollideWorldBounds(true);
   this.physics.add.overlap(player, tomatos,  collecttomato, null, this);
+  this.physics.add.overlap(player, vegetables01,  collectvegetable01, null, this);
+  this.physics.add.overlap(player, vegetables02,  collectvegetable02, null, this);
+  this.physics.add.overlap(player, vegetables03,  collectvegetable03, null, this);
+  this.physics.add.overlap(player, vegetables04,  collectvegetable04, null, this);
+  this.physics.add.overlap(player, vegetables05,  collectvegetable05, null, this);
 
   //score
   text = this.add.text(670, 0, `tomato: ${tomatoScore}x`, {
+    fontSize: '20px',
+    fill: '#ffffff'
+  });
+  text.setScrollFactor(0);
+  text = this.add.text(610, 20, `vegetable01: ${vegetable01Score}x`, {
+    fontSize: '20px',
+    fill: '#ffffff'
+  });
+  text.setScrollFactor(0);
+  text = this.add.text(610, 40, `vegetable02: ${vegetable02Score}x`, {
+    fontSize: '20px',
+    fill: '#ffffff'
+  });
+  text.setScrollFactor(0);
+  text = this.add.text(610, 60, `vegetable03: ${vegetable03Score}x`, {
+    fontSize: '20px',
+    fill: '#ffffff'
+  });
+  text.setScrollFactor(0);
+  text = this.add.text(610, 80, `vegetable04: ${vegetable04Score}x`, {
+    fontSize: '20px',
+    fill: '#ffffff'
+  });
+  text.setScrollFactor(0);
+  text = this.add.text(610, 100, `vegetable05: ${vegetable05Score}x`, {
     fontSize: '20px',
     fill: '#ffffff'
   });
@@ -171,6 +267,36 @@ function collecttomato(player, tomato) {
   tomato.destroy(tomato.x, tomato.y); // remove the tile/coin
   tomatoScore ++; // increment the score
   text.setText(`tomato: ${tomatoScore}x`); // set the text to show the current score
+  return false;
+}
+function collectvegetable01(player, vegetable01) {
+  vegetable01.destroy(vegetable01.x, vegetable01.y); // remove the tile/coin
+  vegetable01Score ++; // increment the score
+  text.setText(`vegetable01: ${vegetable01Score}x`); // set the text to show the current score
+  return false;
+}
+function collectvegetable02(player, vegetable02) {
+  vegetable02.destroy(vegetable02.x, vegetable02.y); // remove the tile/coin
+  vegetable02Score ++; // increment the score
+  text.setText(`vegetable02: ${vegetable02Score}x`); // set the text to show the current score
+  return false;
+}
+function collectvegetable03(player, vegetable03) {
+  vegetable03.destroy(vegetable03.x, vegetable03.y); // remove the tile/coin
+  vegetable03Score ++; // increment the score
+  text.setText(`vegetable03: ${vegetable03Score}x`); // set the text to show the current score
+  return false;
+}
+function collectvegetable04(player, vegetable04) {
+  vegetable04.destroy(vegetable04.x, vegetable04.y); // remove the tile/coin
+  vegetable04Score ++; // increment the score
+  text.setText(`vegetable04: ${vegetable04Score}x`); // set the text to show the current score
+  return false;
+}
+function collectvegetable05(player, vegetable05) {
+  vegetable05.destroy(vegetable05.x, vegetable05.y); // remove the tile/coin
+  vegetable05Score ++; // increment the score
+  text.setText(`vegetable05: ${vegetable05Score}x`); // set the text to show the current score
   return false;
 }
 
