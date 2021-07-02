@@ -21,11 +21,12 @@ let player;
 let showDebug = false;
 
 let tomatoLayer;
-let tomato;
+let tomatos;
 let tomatoScore = 0;
 
 function preload() {
   this.load.image("tiles", "assets/map/map101.png");
+  this.load.image("tomato", "assets/vegetable/tomato.png");
   this.load.tilemapTiledJSON("map", "assets/map/map101.json");
   
   this.load.atlas("atlas", "assets/player/atlas.png", "assets/player/atlas.json");
@@ -34,29 +35,6 @@ function preload() {
 function create() {
   const map = this.make.tilemap({ key: "map" });
   const tileset = map.addTilesetImage("map101", "tiles");
-
-  /*tomatoLayer = map.getObjectLayer('tomatoLayer')['objects'];
-  tomato = this.physics.add.staticGroup()
-  //this is how we actually render our coin object with coin asset we loaded into our game in the preload function
-  tomatoLayer.forEach(object => {
-  let obj = tomato.create(object.x, object.y, "tomato"); 
-     obj.setScale(object.width/16, object.height/16); 
-     obj.setOrigin(0); 
-     obj.body.width = object.width; 
-     obj.body.height = object.height; 
-  });
-
-  //collisons
-  map.setCollisionBetween(0, 923, true, 'ground');
-  player.setCollideWorldBounds(true);
-  this.physics.add.overlap(player, tomato, collect, null, this);
-
-  //score
-  text = this.add.text(570, 70, `Coins: ${tomatoScore}x`, {
-    fontSize: '20px',
-    fill: '#ffffff'
-  });
-  text.setScrollFactor(0);*/
 
   const ground = map.createStaticLayer("ground", tileset, 0, 0);
   const forest = map.createStaticLayer("forest", tileset, 0, 0);
@@ -74,17 +52,40 @@ function create() {
   const plot10 = map.createStaticLayer("plot10", tileset, 0, 0);
   const plot11 = map.createStaticLayer("plot11", tileset, 0, 0);
   const plot12 = map.createStaticLayer("plot12", tileset, 0, 0);
+  tomatoLayer = map.getObjectLayer('tomatoLayer')['objects'];
 
   forest.setCollisionByProperty({ collides: true });
   home01.setCollisionByProperty({ collides: true });
   home02.setCollisionByProperty({ collides: true });
-  
+
   const spawnPoint = map.findObject("Objects", obj => obj.name === "Spawn Point");
   player = this.physics.add.sprite(spawnPoint.x, spawnPoint.y, "atlas","misa-front").setSize(30, 40).setOffset(0, 24);
-
+  
   this.physics.add.collider(player, forest);
   this.physics.add.collider(player, home01);
   this.physics.add.collider(player, home02);
+
+  tomatos = this.physics.add.staticGroup()
+  tomatoLayer.forEach(object => {
+    let obj = tomatos.create(object.x, object.y, "tomato"); 
+       obj.setScale(object.width/32, object.height/32); 
+       obj.setOrigin(0,1); 
+       obj.body.width = object.width; 
+       obj.body.height = object.height; 
+  });
+
+  //collisons
+  map.setCollisionBetween(0, 923, true, 'ground');
+  player.setCollideWorldBounds(true);
+  this.physics.add.overlap(player, tomatos,  collecttomato, null, this);
+
+  //score
+  text = this.add.text(670, 0, `tomato: ${tomatoScore}x`, {
+    fontSize: '20px',
+    fill: '#ffffff'
+  });
+  text.setScrollFactor(0);
+  
 
   const anims = this.anims;
   anims.create({
@@ -111,7 +112,6 @@ function create() {
     frameRate: 10,
     repeat: -1 });
 
-
   const camera = this.cameras.main;
   camera.startFollow(player);
   camera.setBounds(0, 0, map.widthInPixels, map.heightInPixels);
@@ -123,7 +123,6 @@ function create() {
     right : Phaser.Input.Keyboard.KeyCodes.D,
     enter : Phaser.Input.Keyboard.KeyCodes.ENTER,
   })
-
 }
 
 function update(time, delta) {
@@ -164,9 +163,9 @@ function update(time, delta) {
   }
 }
 
-/*function collecttomato(player, tomato) {
+function collecttomato(player, tomato) {
   tomato.destroy(tomato.x, tomato.y); // remove the tile/coin
   tomatoScore ++; // increment the score
   text.setText(`tomato: ${tomatoScore}x`); // set the text to show the current score
   return false;
-}*/
+}
