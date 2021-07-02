@@ -125,7 +125,7 @@ function create() {
     down : Phaser.Input.Keyboard.KeyCodes.S,
     left : Phaser.Input.Keyboard.KeyCodes.A,
     right : Phaser.Input.Keyboard.KeyCodes.D,
-    enter : Phaser.Input.Keyboard.KeyCodes.ENTER,
+    F : Phaser.Input.Keyboard.KeyCodes.F,
   })
 }
 
@@ -172,4 +172,12 @@ function collecttomato(player, tomato) {
   tomatoScore ++; // increment the score
   text.setText(`tomato: ${tomatoScore}x`); // set the text to show the current score
   return false;
+}
+
+function interactive(){
+  if((Math.abs(Merchant.x - player.x) <= 10) & ((Math.abs(Merchant.y - player.y) <= 10))){
+      if(player.inputKeys.F.isDown){
+          console.log("Complete Interactive")
+      }
+  }
 }

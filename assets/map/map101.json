@@ -229,7 +229,7 @@
         {
          "draworder":"topdown",
          "id":5,
-         "name":"Objects",
+         "name":"player",
          "objects":[
                 {
                  "height":0,
@@ -242,6 +242,29 @@
                  "width":0,
                  "x":623,
                  "y":134
+                }],
+         "opacity":1,
+         "type":"objectgroup",
+         "visible":true,
+         "x":0,
+         "y":0
+        }, 
+        {
+         "draworder":"topdown",
+         "id":19,
+         "name":"merchant",
+         "objects":[
+                {
+                 "height":0,
+                 "id":38,
+                 "name":"Spawn Merchant",
+                 "point":true,
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":0,
+                 "x":47,
+                 "y":127
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -368,8 +391,8 @@
          "x":0,
          "y":0
         }],
- "nextlayerid":19,
- "nextobjectid":37,
+ "nextlayerid":20,
+ "nextobjectid":39,
  "orientation":"orthogonal",
  "renderorder":"right-down",
  "tiledversion":"1.7.0",
