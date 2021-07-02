@@ -18,6 +18,7 @@ const config = {
 const game = new Phaser.Game(config);
 let cursors;
 let player;
+let Merchant;
 let showDebug = false;
 
 let tomatoLayer;
@@ -58,12 +59,15 @@ function create() {
   home01.setCollisionByProperty({ collides: true });
   home02.setCollisionByProperty({ collides: true });
 
-  const spawnPoint = map.findObject("Objects", obj => obj.name === "Spawn Point");
+  const spawnPoint = map.findObject("player", obj => obj.name === "Spawn Point");
   player = this.physics.add.sprite(spawnPoint.x, spawnPoint.y, "atlas","misa-front").setSize(30, 40).setOffset(0, 24);
-  
   this.physics.add.collider(player, forest);
   this.physics.add.collider(player, home01);
   this.physics.add.collider(player, home02);
+
+  const spawnMerchant = map.findObject("merchant", obj => obj.name === "Spawn Merchant");
+  Merchant = this.physics.add.sprite(spawnMerchant.x, spawnMerchant.y, "atlas","misa-right").setSize(30, 40).setOffset(0, 24).setImmovable();
+  this.physics.add.collider(player, Merchant).enable
 
   tomatos = this.physics.add.staticGroup()
   tomatoLayer.forEach(object => {
