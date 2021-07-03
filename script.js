@@ -57,7 +57,7 @@ function preload() {
 function create() {
   const map = this.make.tilemap({ key: "map" });
   const tileset = map.addTilesetImage("map101", "tiles");
-
+  
   const ground = map.createStaticLayer("ground", tileset, 0, 0);
   const forest = map.createStaticLayer("forest", tileset, 0, 0);
   const home01 = map.createStaticLayer("home01", tileset, 0, 0);
@@ -119,6 +119,7 @@ function create() {
        obj.body.width = object.width; 
        obj.body.height = object.height; 
   });
+  
   vegetables03 = this.physics.add.staticGroup()
   vegetable03Layer.forEach(object => {
     let obj = vegetables03.create(object.x, object.y, "vegetable03"); 
@@ -127,6 +128,7 @@ function create() {
        obj.body.width = object.width; 
        obj.body.height = object.height; 
   });
+
   vegetables04 = this.physics.add.staticGroup()
   vegetable04Layer.forEach(object => {
     let obj = vegetables04.create(object.x, object.y, "vegetable04"); 
@@ -155,38 +157,11 @@ function create() {
   this.physics.add.overlap(player, vegetables05,  collectvegetable05, null, this);
 
   //score
-  text = this.add.text(670, 0, `tomato: ${tomatoScore}x`, {
+  text = this.add.text(610, 0, `tomato: ${tomatoScore}x`, {
     fontSize: '20px',
     fill: '#ffffff'
   });
-  text.setScrollFactor(0);
-  text = this.add.text(610, 20, `vegetable01: ${vegetable01Score}x`, {
-    fontSize: '20px',
-    fill: '#ffffff'
-  });
-  text.setScrollFactor(0);
-  text = this.add.text(610, 40, `vegetable02: ${vegetable02Score}x`, {
-    fontSize: '20px',
-    fill: '#ffffff'
-  });
-  text.setScrollFactor(0);
-  text = this.add.text(610, 60, `vegetable03: ${vegetable03Score}x`, {
-    fontSize: '20px',
-    fill: '#ffffff'
-  });
-  text.setScrollFactor(0);
-  text = this.add.text(610, 80, `vegetable04: ${vegetable04Score}x`, {
-    fontSize: '20px',
-    fill: '#ffffff'
-  });
-  text.setScrollFactor(0);
-  text = this.add.text(610, 100, `vegetable05: ${vegetable05Score}x`, {
-    fontSize: '20px',
-    fill: '#ffffff'
-  });
-  text.setScrollFactor(0);
   
-
   const anims = this.anims;
   anims.create({
     key: "misa-left-walk",
@@ -223,6 +198,23 @@ function create() {
     right : Phaser.Input.Keyboard.KeyCodes.D,
     F : Phaser.Input.Keyboard.KeyCodes.F,
   })
+
+   // Debug graphics
+   this.input.keyboard.once("keydown_C", event => {
+    // Turn on physics debugging to show player's hitbox
+    this.physics.world.createDebugGraphic();
+
+    // Create worldLayer collision graphic above the player, but below the help text
+    const graphics = this.add.
+    graphics().
+    setAlpha(0.75).
+    setDepth(0);
+    forest.renderDebug(graphics, {
+      tileColor: null, // Color of non-colliding tiles
+      collidingTileColor: new Phaser.Display.Color(243, 134, 48, 255), // Color of colliding tiles
+      faceColor: new Phaser.Display.Color(40, 39, 37, 255) // Color of colliding face edges
+    });
+  });
 }
 
 function update(time, delta) {
@@ -261,6 +253,7 @@ function update(time, delta) {
     if (prevVelocity.y < 0) player.setTexture("atlas", "misa-back");else
     if (prevVelocity.y > 0) player.setTexture("atlas", "misa-front");
   }
+
 }
 
 function collecttomato(player, tomato) {
