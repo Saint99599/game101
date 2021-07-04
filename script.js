@@ -1,7 +1,9 @@
+import {lottery} from "./Lottery.js";
+
 const config = {
   type: Phaser.AUTO,
-  width: 800,
-  height: 736,
+  width: 1280,
+  height: 720,
   parent: "game-container",
   pixelArt: true,
   physics: {
@@ -11,16 +13,46 @@ const config = {
   scene: {
     preload: preload,
     create: create,
-    update: update 
+    update: update,
+    lottery 
   } 
 };
 
 const game = new Phaser.Game(config);
+game.scene.add("lottery", lottery);
+game.scene.start('lottery')
 let cursors;
 let player;
 let Merchant;
 let showDebug = false;
 
+var vegetable = [
+  {
+    Layer,
+    key: "Tomato",
+    score: 0
+  },
+  {
+    Layer,
+    key: "pumpkin",
+    score: 0
+  },
+  {
+    Layer,
+    key: "3",
+    score: 0
+  },
+  {
+    Layer,
+    key: "4",
+    score: 0
+  },
+  {
+    Layer,
+    key: "5",
+    score: 0
+  }
+  ];
 let tomatoLayer;
 let tomatos;
 let tomatoScore = 0;
@@ -40,6 +72,12 @@ let vegetable05Layer;
 let vegetables05;
 let vegetable05Score = 0;
 
+var lottery_cost = 100;
+var bought_lottery = [];
+var money = 1000;
+var bought;
+var moneyText;
+var on = false;
 function preload() {
   this.load.image("tiles", "assets/map/map101.png");
   this.load.image("tomato", "assets/vegetable/tomato.png");
@@ -50,11 +88,14 @@ function preload() {
   this.load.image("vegetable05", "assets/vegetable/vegetable05.png");
   
   this.load.tilemapTiledJSON("map", "assets/map/map101.json");
-  
   this.load.atlas("atlas", "assets/player/atlas.png", "assets/player/atlas.json");
+  // Lottery.preload();
+  this.load.image("woodboard", "assets/woodboard.png")
 }
 
 function create() {
+
+
   const map = this.make.tilemap({ key: "map" });
   const tileset = map.addTilesetImage("map101", "tiles");
   
@@ -196,7 +237,7 @@ function create() {
     down : Phaser.Input.Keyboard.KeyCodes.S,
     left : Phaser.Input.Keyboard.KeyCodes.A,
     right : Phaser.Input.Keyboard.KeyCodes.D,
-    F : Phaser.Input.Keyboard.KeyCodes.F,
+    F : Phaser.Input.Keyboard.KeyCodes.F
   })
 
    // Debug graphics
@@ -215,10 +256,18 @@ function create() {
       faceColor: new Phaser.Display.Color(40, 39, 37, 255) // Color of colliding face edges
     });
   });
+
+  
+  
+  
+  
+  
 }
 
 function update(time, delta) {
-  const speed = 200;
+  moneyText.setText(money);
+  
+  const speed = 500;
   const prevVelocity = player.body.velocity.clone();
 
   player.body.setVelocity(0);
@@ -252,10 +301,17 @@ function update(time, delta) {
     if (prevVelocity.x > 0) player.setTexture("atlas", "misa-right");else
     if (prevVelocity.y < 0) player.setTexture("atlas", "misa-back");else
     if (prevVelocity.y > 0) player.setTexture("atlas", "misa-front");
+
+    interactive();
   }
 
 }
-
+function collecting(vegetable){
+  vegetable.destroy(vegetable.x, vegetable.y);
+  vegetable.score++;
+  text.setText(vegetable.key + ":" + vegetable.score)
+  return false
+}
 function collecttomato(player, tomato) {
   tomato.destroy(tomato.x, tomato.y); // remove the tile/coin
   tomatoScore ++; // increment the score
@@ -294,9 +350,116 @@ function collectvegetable05(player, vegetable05) {
 }
 
 function interactive(){
-  if((Math.abs(Merchant.x - player.x) <= 10) & ((Math.abs(Merchant.y - player.y) <= 10))){
-      if(player.inputKeys.F.isDown){
-          console.log("Complete Interactive")
+  if((Math.abs(Merchant.x - player.x) <= 50) & ((Math.abs(Merchant.y - player.y) <= 50))){
+      if(cursors.F.isDown){
+        if(on){
+          var lotteryX = 3;
+          var lotteryY = 5;
+            //woodboard
+          var woodboard = this.add.image(config.width/2, 0 - config.height/2, 'woodboard');
+          woodboard.setOrigin(0.5, 0.5);
+          woodboard.setScale(0.7);
+          //woodboard animation
+          while(woodboard.y <= config.width/4){
+            woodboard.y += 25;
+          }
+          bought = this.add.text(1200, 250, '', {font: '32px Courier', fill: '#f0f'})
+    
+          //money to buy lottery
+          moneyText = this.add.text(1200, 250, '', {font: '32px Courier', fill: '#f0ff'})
+          moneyText.setText(money);
+          
+          var lottery_text = [];
+          var x;
+          var y;
+          // //show first random lottery
+          for(var i = 0; i < lotteryX;i++){
+              x = (i+1)*300;
+              for(var j = 0; j < lotteryY; j++){
+                  y = ((j+1)*100)+25;
+                  lottery_text.push(this.add.text(x, y, '', {font: '32px Courier', fill: '#000000'}))
+                  setInteract(lottery_text[((5*i)+j)]);
+            }
+          }
+        }
       }
+    }
+}
+
+// function lottery(){
+//   var lotteryX = 3;
+//   var lotteryY = 5;       
+  
+//   var bought = this.add.text(1100, 300, '', {font: '32px Courier', fill: '#f0f'})
+  
+//   //woodboard
+//   var woodboard = this.add.image(config.width/2, 0 - config.height/2, 'woodboard');
+//   woodboard.setOrigin(0.5, 0.5);
+//   woodboard.setScale(0.7);
+//   //woodboard animation
+//   while(woodboard.y <= config.width/4){
+//       woodboard.y += 25;
+//   }
+
+//   //money to buy lottery
+//   this.money = 1000;
+//   this.moneyText = this.add.text(1200, 100, '', {font: '32px Courier', fill: '#f0f'})
+//   this.moneyText.setText(this.money);
+//   money = this.money
+  
+//   var lottery_text = [];
+//   var x;
+//   var y;
+//   // //show first random lottery
+//   for(var i = 0; i < lotteryX;i++){
+//       x = (i+1)*300;
+//       for(var j = 0; j < lotteryY; j++){
+//           y = ((j+1)*100)+25;
+//           lottery_text.push(this.add.text(x, y, '', {font: '32px Courier', fill: '#000000'}))
+//           this.setInteract(lottery_text[((5*i)+j)]);
+//       }
+//   }  
+//   }
+function setInteract(list){
+  var random = normalRand();
+  list.setText(random);
+  list.setInteractive();
+  list.on('pointerdown', () => {
+      if(money >= lottery_cost){
+          money -= lottery_cost;
+          console.log('purchase complete')
+          addInv_lottery(random);
+          random = normalRand();
+          list.setText(random);
+      }
+      else{
+          console.log("don't have enough money");
+      }
+  })
+}
+function addInv_lottery(text){
+  //add to list
+  
+  bought_lottery.push(text);
+  var list = '';
+  console.log(bought_lottery);
+  for(var i = 0 ; i < bought_lottery.length; i++){
+      list += '\n';
+      list += bought_lottery[i];
   }
+  bought.setText(list);
+}
+
+function normalRand(){
+  var assem = '';
+
+  for(var i = 0; i < 3; i++){
+      assem += (Math.floor(Math.random() * 10));
+      
+  }
+          
+  //check lottery 
+
+  
+  return assem;
 }

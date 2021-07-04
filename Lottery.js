@@ -1,10 +1,9 @@
-class lottery extends Phaser.Scene {
-
+export class lottery extends Phaser.Scene {
+    constructor(){
+        super('scene');
+    }
     preload(){
-        var url;
-        url = 'https://raw.githubusercontent.com/rexrainbow/phaser3-rex-notes/master/dist/rexbbcodetextplugin.min.js';
-        this.load.plugin('rexbbcodetextplugin', url, true);
-        this.load.image('woodboard', 'asset/woodboard.png');
+        // this.load.image('woodboard', 'asset/woodboard.png');
 
     }
     
@@ -27,7 +26,6 @@ class lottery extends Phaser.Scene {
         while(this.woodboard.y <= config.width/4){
             this.woodboard.y += 25;
         }
-        var inputText = this.add.rexBBCodeText(400, 300, 'House' ,{font: '32px Courier', fill: '#fof'})
 
         //money to buy lottery
         this.money = 1000;
@@ -49,7 +47,6 @@ class lottery extends Phaser.Scene {
         
     }
     update(){
-
         this.moneyText.setText(this.money);
     }
 
@@ -70,7 +67,6 @@ class lottery extends Phaser.Scene {
             }
         })
     }
-
 
     addInv_lottery(text){
         //add to list
@@ -97,50 +93,4 @@ class lottery extends Phaser.Scene {
         
         return assem;
     }
-    twodigit(){
-
-        //random another 3 digits
-        var arr = [];
-
-        //j -> all lottery in table
-        for(var j = 0; j < 5; j++){
-
-            //assemble all digits in lottery
-            var assem = '';
-
-            //i -> random number digits
-            for(var i = 0; i < 4; i++){
-
-                assem += (Math.floor(Math.random() * 10));
-                
-            }
-            //another 2 digits want to search
-            assem += '969'
-            arr.push(assem);
-        }
-        //check lottery
-
-
-        return assem;
-    }
-
-    check_list(){
-        //check same lottery in one random
-        
-        //check lottery already bought
-
-    }
-    search(){
-
-    }
 }
-const config = {
-    type: Phaser.AUTO,
-    parent: 'phaser-example',
-    width: 1280,
-    height: 720,
-    scene: [ lottery ]
-};
-        
-const start = new Phaser.Game(config)
-// var button = new Button(gameObject, config);
