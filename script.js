@@ -1,9 +1,9 @@
-import {lottery} from "./Lottery.js";
+// import {lottery} from "./Lottery.js";
 
 const config = {
   type: Phaser.AUTO,
-  width: 1280,
-  height: 720,
+  width: 1000,
+  height: 1000,
   parent: "game-container",
   pixelArt: true,
   physics: {
@@ -14,7 +14,6 @@ const config = {
     preload: preload,
     create: create,
     update: update,
-    lottery 
   } 
 };
 
@@ -26,30 +25,41 @@ let player;
 let Merchant;
 let showDebug = false;
 
-var vegetable = [
+let vegetable = [
   {
-    Layer,
+    layer: map.getObjectLayer('tomatoLayer')['objects'],
+    physic: this.physics.add.staticGroup(),
     key: "Tomato",
     score: 0
   },
   {
-    Layer,
+    layer: map.getObjectLayer('vegetable01Layer')['objects'],
+    physic: this.physics.add.staticGroup(),
     key: "pumpkin",
     score: 0
   },
   {
-    Layer,
+    layer: map.getObjectLayer('vegetable02Layer')['objects'],
+    physic: this.physics.add.staticGroup(),
     key: "3",
     score: 0
   },
   {
-    Layer,
+    layer: map.getObjectLayer('vegetable03Layer')['objects'],
+    physic: this.physics.add.staticGroup(),
     key: "4",
     score: 0
   },
   {
-    Layer,
+    layer: map.getObjectLayer('vegetable04Layer')['objects'],
+    physic: this.physics.add.staticGroup(),
     key: "5",
+    score: 0
+  },
+  {
+    layer: map.getObjectLayer('vegetable05Layer')['objects'],
+    physic: this.physics.add.staticGroup(),
+    key: "6",
     score: 0
   }
   ];
@@ -115,12 +125,9 @@ function create() {
   const plot10 = map.createStaticLayer("plot10", tileset, 0, 0);
   const plot11 = map.createStaticLayer("plot11", tileset, 0, 0);
   const plot12 = map.createStaticLayer("plot12", tileset, 0, 0);
-  tomatoLayer = map.getObjectLayer('tomatoLayer')['objects'];
-  vegetable01Layer = map.getObjectLayer('vegetable01Layer')['objects'];
-  vegetable02Layer = map.getObjectLayer('vegetable02Layer')['objects'];
-  vegetable03Layer = map.getObjectLayer('vegetable03Layer')['objects'];
-  vegetable04Layer = map.getObjectLayer('vegetable04Layer')['objects'];
-  vegetable05Layer = map.getObjectLayer('vegetable05Layer')['objects'];
+
+  // vegetable[0].layer = 
+
 
   forest.setCollisionByProperty({ collides: true });
   home01.setCollisionByProperty({ collides: true });
@@ -136,24 +143,24 @@ function create() {
   Merchant = this.physics.add.sprite(spawnMerchant.x, spawnMerchant.y, "atlas","misa-right").setSize(30, 40).setOffset(0, 24).setImmovable();
   this.physics.add.collider(player, Merchant).enable
 
-  tomatos = this.physics.add.staticGroup()
-  tomatoLayer.forEach(object => {
-    let obj = tomatos.create(object.x, object.y, "tomato"); 
+  // vegetable[0].physic = 
+  vegetable[0].layer.forEach(object => {
+    let obj = vegetable[0].physic.create(object.x, object.y, "tomato"); 
        obj.setScale(object.width/32, object.height/32); 
        obj.setOrigin(0,1); 
        obj.body.width = object.width; 
        obj.body.height = object.height; 
   });
-  vegetables01 = this.physics.add.staticGroup()
-  vegetable01Layer.forEach(object => {
+  // vegetables01 = 
+  vegetable[1].layer.forEach(object => {
     let obj = vegetables01.create(object.x, object.y, "vegetable01"); 
        obj.setScale(object.width/32, object.height/32); 
        obj.setOrigin(0,1); 
        obj.body.width = object.width; 
        obj.body.height = object.height; 
   });
-  vegetables02 = this.physics.add.staticGroup()
-  vegetable02Layer.forEach(object => {
+  // vegetables02 = this.physics.add.staticGroup()
+  vegetable[2].layer.forEach(object => {
     let obj = vegetables02.create(object.x, object.y, "vegetable02"); 
        obj.setScale(object.width/32, object.height/32); 
        obj.setOrigin(0,1); 
@@ -161,8 +168,8 @@ function create() {
        obj.body.height = object.height; 
   });
   
-  vegetables03 = this.physics.add.staticGroup()
-  vegetable03Layer.forEach(object => {
+  // vegetables03 = this.physics.add.staticGroup()
+  vegetable[3].layer.forEach(object => {
     let obj = vegetables03.create(object.x, object.y, "vegetable03"); 
        obj.setScale(object.width/32, object.height/32); 
        obj.setOrigin(0,1); 
@@ -170,16 +177,16 @@ function create() {
        obj.body.height = object.height; 
   });
 
-  vegetables04 = this.physics.add.staticGroup()
-  vegetable04Layer.forEach(object => {
+  // vegetables04 = this.physics.add.staticGroup()
+  vegetable[4].layer.forEach(object => {
     let obj = vegetables04.create(object.x, object.y, "vegetable04"); 
        obj.setScale(object.width/32, object.height/32); 
        obj.setOrigin(0,1); 
        obj.body.width = object.width; 
        obj.body.height = object.height; 
   });
-  vegetables05 = this.physics.add.staticGroup()
-  vegetable05Layer.forEach(object => {
+  // vegetables05 = this.physics.add.staticGroup()
+  vegetable[5].layer.forEach(object => {
     let obj = vegetables05.create(object.x, object.y, "vegetable05"); 
        obj.setScale(object.width/32, object.height/32); 
        obj.setOrigin(0,1); 
@@ -190,12 +197,12 @@ function create() {
   //collisons
   map.setCollisionBetween(0, 923, true, 'ground');
   player.setCollideWorldBounds(true);
-  this.physics.add.overlap(player, tomatos,  collecttomato, null, this);
-  this.physics.add.overlap(player, vegetables01,  collectvegetable01, null, this);
-  this.physics.add.overlap(player, vegetables02,  collectvegetable02, null, this);
-  this.physics.add.overlap(player, vegetables03,  collectvegetable03, null, this);
-  this.physics.add.overlap(player, vegetables04,  collectvegetable04, null, this);
-  this.physics.add.overlap(player, vegetables05,  collectvegetable05, null, this);
+  this.physics.add.overlap(player, vegetable[0].layer,  collecting, null, this);
+  this.physics.add.overlap(player, vegetable[1].layer,  collecting, null, this);
+  this.physics.add.overlap(player, vegetable[2].layer,  collecting, null, this);
+  this.physics.add.overlap(player, vegetable[3].layer,  collecting, null, this);
+  this.physics.add.overlap(player, vegetable[4].layer,  collecting, null, this);
+  this.physics.add.overlap(player, vegetable[5].layer,  collecting, null, this);
 
   //score
   text = this.add.text(610, 0, `tomato: ${tomatoScore}x`, {
@@ -257,11 +264,6 @@ function create() {
     });
   });
 
-  
-  
-  
-  
-  
 }
 
 function update(time, delta) {
